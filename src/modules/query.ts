@@ -29,3 +29,15 @@ export const insertUserByEmail = async ({
     throw new Error(e)
   }
 }
+
+export const updateUserTokenByEmail = async ({ user_token, email }: { user_token: string, email: string }) => {
+  try {
+    const SQL: string = 'update user set user_token = ? where email = ?'
+    const SQL_VALUES = [user_token ,email]
+    const [row] = await db.connect((con: any) => con.query(SQL, SQL_VALUES))()
+    return row
+  } catch (e: any) {
+    console.error(e)
+    throw new Error(e)
+  }
+}
