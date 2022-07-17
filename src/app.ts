@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import config from './config';
 import { errorHandler, logHandler } from './modules/handler';
+import userRouter from "./routes/userRouter";
 
 
 const app = express();
@@ -41,14 +42,12 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', (req, res) => {
-    res.send('get /');
-});
-
+app.use('/api/user', userRouter);
 app.use(logHandler);
 app.use(errorHandler);
 
 app.listen(PORT, () => {
     console.log(`Running on Port ${PORT}`);
+});
 
 export default app;
