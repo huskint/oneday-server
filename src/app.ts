@@ -50,6 +50,5 @@ app.use(errorHandler);
 
 app.listen(PORT, () => {
     console.log(`Running on Port ${PORT}`);
-});
 
 export default app;

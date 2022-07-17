@@ -13,5 +13,8 @@
   },
   "include": [
     "src/**/*"
-  ]
+  ],
+  "lint-staged": {
+    "*.{js,ts}": "eslint --fix",
+  }
 }
