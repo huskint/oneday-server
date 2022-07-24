@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 
 import * as db from '../modules/query'
 import getValidationUser from '../utils/getValidationUser'
-import { createToken } from '../modules/auth'
+import { createToken, isSignIn } from '../modules/auth'
 
 const router = express.Router()
 
@@ -67,6 +67,7 @@ router.post('/signup', async (req: Request, res: Response) => {
       msg: `${name}님 회원가입 되었습니다.`,
       data: {
         token: signUpUser.user_token,
+        user: signUpUser,
       },
     })
   } catch (e) {
@@ -79,18 +80,18 @@ router.post('/signup', async (req: Request, res: Response) => {
 })
 
 // 유저 이메일 로그인
-router.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+router.post('/signin', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password } = req.body
     if (!getValidationUser('email', email)) {
-      res.status(403).json({
+      res.status(401).json({
         success: false,
         msg: '아이디 또는 비밀번호가 일치하지 않습니다.',
       })
       return
     }
     if (!getValidationUser('password', password)) {
-      res.status(403).json({
+      res.status(401).json({
         success: false,
         msg: '아이디 또는 비밀번호가 일치하지 않습니다.',
       })
@@ -118,18 +119,38 @@ router.post('/login', async (req: Request, res: Response, next: NextFunction) =>
     await db.updateUserTokenByEmail({ user_token: token, email })
     res.status(200).json({
       success: true,
+      msg: `${findByUser.name}님 로그인 되었습니다.`,
       data: {
         user: findByUser,
-        token,
       },
     })
   } catch (e) {
     console.error(e)
+    res.status(401).json({
+      success: false,
+      msg: '오류가 발생 했습니다.',
+    })
+  }
+})
+
+router.post('/auth', isSignIn, async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { email } = req.params;
+    const [findByUser] = await db.findUserByEmail({ email });
+    delete findByUser.password;
+    res.status(200).json({
+      success: true,
+      data: {
+        user: findByUser,
+      }
+    });
+  } catch (e) {
     res.status(500).json({
       success: false,
       msg: '오류가 발생 했습니다.',
     })
   }
 })
+
 
 export default router
