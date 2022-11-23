@@ -13,4 +13,17 @@ create table `user`
     `name`         varchar(100) not null,                            -- 유저 이름(닉네임)
     `disabled`     tinyint      not null default 0,                  -- 활성화(0: 일반, 1: 탈퇴)
     `create_date`  timestamp    not null default current_timestamp   -- 유저 생성일
-);;
+);
+
+-- 감정일기
+create table `diary`
+(
+    `diary_id`     int          not null auto_increment primary key, -- 일기 id
+    `id`           int,
+    `feeling`      varchar(50),                                      -- 일기 기분
+    `emotions`     varchar(2048),                                      		 -- 일기 감정 표현
+    `text`         text,                      						 -- 일기 텍스트
+    `create_date`  timestamp    not null default current_timestamp,   -- 일기 생성일
+    FOREIGN KEY (`id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+);
+

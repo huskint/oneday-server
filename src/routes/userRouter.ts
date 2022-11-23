@@ -135,15 +135,15 @@ router.post('/signin', async (req: Request, res: Response, next: NextFunction) =
 
 router.post('/auth', isSignIn, async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { email } = req.params;
-    const [findByUser] = await db.findUserByEmail({ email });
-    delete findByUser.password;
+    const { email } = req.params
+    const [findByUser] = await db.findUserByEmail({ email })
+    delete findByUser.password
     res.status(200).json({
       success: true,
       data: {
         user: findByUser,
-      }
-    });
+      },
+    })
   } catch (e) {
     res.status(500).json({
       success: false,

@@ -41,6 +41,7 @@ export const isSignIn = async (req: Request, res: Response, next: NextFunction) 
       });
     }
     req.params.email = findByUser.email;
+    req.params.id = findByUser.id;
     next();
   } catch (e) {
     console.error(e);

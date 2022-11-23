@@ -8,6 +8,7 @@ import cors from 'cors'
 import config from './config'
 import { errorHandler, logHandler } from './modules/handler'
 import userRouter from './routes/userRouter'
+import diaryRouter from './routes/diaryRouter'
 
 
 const app = express()
@@ -43,6 +44,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/api/user', userRouter)
+app.use('/api/diary', diaryRouter)
 app.use(logHandler)
 app.use(errorHandler)
 
