@@ -1,20 +1,16 @@
 import express, { Request, Response, NextFunction } from 'express'
-import bcrypt from 'bcrypt'
 
 import * as db from '../modules/query'
-import getValidationUser from '../utils/getValidationUser'
-import { createToken, isSignIn } from '../modules/auth'
+import { isSignIn } from '../modules/auth'
 import { Emotion, Feeling } from '../interface/diary.interface'
 
 const router = express.Router()
-
 
 // 일기 등록
 router.post('/', isSignIn, async (req: Request, res: Response) => {
   try {
     const { id } = req.params
     const { feeling, emotions = [], text } = req.body
-    console.log({ id, feeling, emotions, text })
     const feelingList = Object.values(Feeling)
     const emotionList = Object.values(Emotion)
 
@@ -26,7 +22,11 @@ router.post('/', isSignIn, async (req: Request, res: Response) => {
       return
     }
 
-    if (Array.isArray(emotions) && emotions.length > 0 && !emotions.every((emotion: Emotion) => emotionList.includes(emotion))) {
+    if (
+      Array.isArray(emotions) &&
+      emotions.length > 0 &&
+      !emotions.every((emotion: Emotion) => emotionList.includes(emotion))
+    ) {
       res.status(403).json({
         success: false,
         msg: '감정이 올바르지 않습니다.',

@@ -11,6 +11,7 @@ const config: ProcessEnv = {
   DB_PASSWORD: process.env.DB_PASSWORD,
   DB_NAME: process.env.DB_NAME,
   JWT_SECRET: process.env.JWT_SECRET,
+  KAKAO_REDIRECT: process.env.KAKAO_REDIRECT,
 }
 
 export default config

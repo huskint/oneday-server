@@ -4,13 +4,13 @@ import config from './index'
 const { DB_HOST, DB_USER, DB_PASSWORD, DB_NAME } = config
 
 interface MySQLConfig {
-  host: string | undefined;
-  port: number;
-  user: string | undefined;
-  password: string | undefined;
-  database: string | undefined;
-  connectionLimit: number;
-  waitForConnections: boolean;
+  host: string | undefined
+  port: number
+  user: string | undefined
+  password: string | undefined
+  database: string | undefined
+  connectionLimit: number
+  waitForConnections: boolean
 }
 
 const mysqlConfig: MySQLConfig = {
@@ -25,12 +25,14 @@ const mysqlConfig: MySQLConfig = {
 
 const pool = mysql.createPool(mysqlConfig)
 
-export const connect = (fn: any) => async (...args: any) => {
-  const con: any = await pool.getConnection()
-  const result = await fn(con, ...args).catch(async (error: any) => {
+export const connect =
+  (fn: any) =>
+  async (...args: any) => {
+    const con: any = await pool.getConnection()
+    const result = await fn(con, ...args).catch(async (error: any) => {
+      con.release()
+      throw error
+    })
     con.release()
-    throw error
-  })
-  con.release()
-  return result
-}
+    return result
+  }

@@ -10,7 +10,6 @@ import { errorHandler, logHandler } from './modules/handler'
 import userRouter from './routes/userRouter'
 import diaryRouter from './routes/diaryRouter'
 
-
 const app = express()
 const { PORT } = config
 
@@ -18,16 +17,20 @@ if (process.env.NODE_ENV === 'production') {
   app.use(morgan('combined'))
   app.use(hpp())
   app.use(helmet({ contentSecurityPolicy: false }))
-  app.use(cors({
-    origin: ['http://localhost', 'http://localhost:3000'],
-    credentials: true,
-  }))
+  app.use(
+    cors({
+      origin: ['http://localhost', 'http://localhost:3000'],
+      credentials: true,
+    }),
+  )
 } else {
   app.use(morgan('dev'))
-  app.use(cors({
-    origin: true,
-    credentials: true,
-  }))
+  app.use(
+    cors({
+      origin: true,
+      credentials: true,
+    }),
+  )
 }
 
 app.all('*', (req: Request, res: Response, next: NextFunction) => {

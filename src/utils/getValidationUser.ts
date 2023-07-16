@@ -7,4 +7,4 @@ const getValidationUser = (type: 'email' | 'password' | 'name', value: string) =
   return regexp[type].test(value)
 }
 
-export default getValidationUser;
+export default getValidationUser

@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
 
 export interface IErr extends Error {
-  status: number;
-  data?: any;
+  status: number
+  data?: any
 }
 
 export const logHandler = (err: IErr, req: Request, res: Response, next: NextFunction) => {
