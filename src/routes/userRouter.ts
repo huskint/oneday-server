@@ -190,7 +190,7 @@ router.post('/oauth/kakao', async (req: Request, res: Response, next: NextFuncti
 
       const {
         id,
-        kakao_account: { nickname },
+        properties: { nickname },
       } = data
 
       const name = nickname || `카카오@${id}`
