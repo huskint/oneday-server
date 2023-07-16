@@ -137,13 +137,15 @@ router.post('/signin', async (req: Request, res: Response, next: NextFunction) =
 
 router.post('/auth', isSignIn, async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { email } = req.params
-    const [findByUser] = await db.findUserByEmail({ email })
-    delete findByUser.password
+    const { id } = req.params
+    const [findByUser] = await db.findUserById({ id })
     res.status(200).json({
       success: true,
       data: {
-        user: findByUser,
+        user: {
+          name: findByUser.name,
+          type: findByUser.type,
+        },
       },
     })
   } catch (e) {
@@ -154,6 +156,7 @@ router.post('/auth', isSignIn, async (req: Request, res: Response, next: NextFun
   }
 })
 
+// 카카오 소셜 로그인
 router.post('/oauth/kakao', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { code } = req.body

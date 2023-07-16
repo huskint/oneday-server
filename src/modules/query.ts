@@ -1,6 +1,18 @@
 import * as db from '../config/mysql_connect'
 import { Feeling } from '../interface/diary.interface'
 
+export const findUserById = async ({ id }: { id: string }) => {
+  try {
+    const SQL = 'select id, email, password, type, name, role, user_token, disabled from user where id = ?'
+    const SQL_VALUES = [id]
+    const [row] = await db.connect((con: any) => con.query(SQL, SQL_VALUES))()
+    return row
+  } catch (e: any) {
+    console.error(e)
+    throw new Error(e)
+  }
+}
+
 export const findUserByEmail = async ({ email }: { email: string }) => {
   try {
     const SQL =
