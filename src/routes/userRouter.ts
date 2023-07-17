@@ -177,7 +177,7 @@ router.post('/oauth/kakao', async (req: Request, res: Response, next: NextFuncti
           },
           params: {
             grant_type: 'authorization_code',
-            client_id: '22a47cacd66d8fbc418475aec08c1495',
+            client_id: 'a3d08c94732b0c85334d04b474f49873',
             code,
             redirect_uri: 'http://localhost:5173/oauth/kakao',
           },
