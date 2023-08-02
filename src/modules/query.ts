@@ -118,20 +118,41 @@ export const updateUserTokenBySocial = async ({
 
 export const insertDiary = async ({
   id,
-  feeling,
+  feel,
   emotions = '',
   text = '',
+  dateString,
 }: {
   id: number
-  feeling: Feeling
+  feel: Feeling
   emotions: string
   text: string
+  dateString: string
 }) => {
   try {
-    const SQL = 'insert into diary(id, feeling, emotions, text) values(?, ?, ?, ?)'
-    const SQL_VALUES = [id, feeling, emotions, text]
+    const SQL = 'insert into diary(id, feel, emotions, text, date) values(?, ?, ?, ?, ?)'
+    const SQL_VALUES = [id, feel, emotions, text, dateString]
     const [row] = await db.connect((con: any) => con.query(SQL, SQL_VALUES))()
     return row.insertId
+  } catch (e: any) {
+    console.error(e)
+    throw new Error(e)
+  }
+}
+
+export const getDiariesByYearAndMonth = async ({ id, year, month }: { id: number; year: number; month: number }) => {
+  try {
+    const startDate = new Date(year, month - 1, 1)
+    const endDate = new Date(year, month, 0)
+
+    const startDateString = startDate.toISOString().split('T')[0]
+    const endDateString = endDate.toISOString().split('T')[0]
+
+    const SQL = 'SELECT * FROM diary WHERE id = ? AND create_date >= ? AND create_date <= ? ORDER BY create_date'
+    const SQL_VALUES = [id, startDateString, endDateString]
+
+    const [rows] = await db.connect((con: any) => con.query(SQL, SQL_VALUES))()
+    return rows
   } catch (e: any) {
     console.error(e)
     throw new Error(e)

@@ -1,9 +1,9 @@
 export enum Feeling {
-  HAPPY = 'HAPPY',
-  GOOD = 'GOOD',
-  NORMAL = 'NORMAL',
-  SOSO = 'SOSO',
-  BAD = 'BAD',
+  행복 = '행복',
+  좋음 = '좋음',
+  보통 = '보통',
+  슬픔 = '슬픔',
+  나쁨 = '나쁨',
 }
 
 export enum Emotion {
