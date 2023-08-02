@@ -8,6 +8,7 @@ import getMappedFeels from '../utils/getMappedFeels'
 import isValidDateString from '../utils/isValidDateString'
 import getFormDate from '../utils/getFormDate'
 import getMappedDiary from '../utils/getMappedDiary'
+import { getDiariesByYearMonthAndDate } from '../modules/query'
 
 const router = express.Router()
 
@@ -17,6 +18,31 @@ router.post('/', isSignIn, async (req: Request, res: Response) => {
     const { feel, emotions = [], text, date } = req.body
     const staticFeels = getMappedFeels()
     const staticEmotions = getMappedEmotions()
+
+    const dateString = getFormDate(date)
+    const validDateString = isValidDateString(dateString)
+    if (!validDateString) {
+      res.status(403).json({
+        success: false,
+        msg: '날짜가 올바르지 않습니다.',
+      })
+      return
+    }
+
+    const findDiary = await getDiariesByYearMonthAndDate({
+      id: parseInt(id, 10),
+      year: parseInt(date.year, 10),
+      month: parseInt(date.month, 10),
+      date: parseInt(date.date, 10),
+    })
+
+    if (findDiary.length > 0) {
+      res.status(403).json({
+        success: false,
+        msg: '이미 일기가 존재합니다.',
+      })
+      return
+    }
 
     if (!staticFeels.includes(feel)) {
       res.status(403).json({
@@ -34,16 +60,6 @@ router.post('/', isSignIn, async (req: Request, res: Response) => {
       res.status(403).json({
         success: false,
         msg: '감정이 올바르지 않습니다.',
-      })
-      return
-    }
-
-    const dateString = getFormDate(date)
-    const validDateString = isValidDateString(dateString)
-    if (!validDateString) {
-      res.status(403).json({
-        success: false,
-        msg: '날짜가 올바르지 않습니다.',
       })
       return
     }
