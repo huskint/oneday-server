@@ -137,7 +137,16 @@ router.get('/:diaryId', isSignIn, isDiaryOwner, async (req: Request, res: Respon
       id: parseInt(id, 10),
     })
 
-    const mappedDiary = diary.map(getMappedDiary)
+    const diaryRow = diary[0]
+    if (!diaryRow) {
+      res.status(403).json({
+        success: false,
+        msg: '해당 일기가 존재하지 않습니다.',
+      })
+      return
+    }
+
+    const mappedDiary = getMappedDiary(diaryRow)
 
     res.status(200).json({
       success: true,
