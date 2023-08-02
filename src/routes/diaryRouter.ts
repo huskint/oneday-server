@@ -176,6 +176,21 @@ router.put('/:diaryId', isSignIn, isDiaryOwner, async (req: Request, res: Respon
       return
     }
 
+    const findDiary = await db.getDiariesByYearMonthAndDate({
+      id: parseInt(id, 10),
+      year: parseInt(date.year, 10),
+      month: parseInt(date.month, 10),
+      date: parseInt(date.date, 10),
+    })
+
+    if (findDiary.length === 0) {
+      res.status(403).json({
+        success: false,
+        msg: '수정 일자에 일기가 존재하지 않습니다.',
+      })
+      return
+    }
+
     const staticFeels = getMappedFeels()
     const staticEmotions = getMappedEmotions()
 
