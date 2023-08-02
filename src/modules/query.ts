@@ -146,18 +146,16 @@ export const updateDiary = async ({
   feel,
   emotions = '',
   text = '',
-  dateString,
 }: {
   diaryId: number
   id: number
   feel: Feeling
   emotions: string
   text: string
-  dateString: string
 }) => {
   try {
-    const SQL = 'UPDATE diary SET feel = ?, emotions = ?, text = ?, create_date = ? WHERE diary_id = ? AND id = ?'
-    const SQL_VALUES = [feel, emotions, text, dateString, diaryId, id]
+    const SQL = 'UPDATE diary SET feel = ?, emotions = ?, text = ? WHERE diary_id = ? AND id = ?'
+    const SQL_VALUES = [feel, emotions, text, diaryId, id]
     const [row] = await db.connect((con: any) => con.query(SQL, SQL_VALUES))()
     return row.affectedRows
   } catch (e: any) {

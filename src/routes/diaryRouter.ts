@@ -176,21 +176,6 @@ router.put('/:diaryId', isSignIn, isDiaryOwner, async (req: Request, res: Respon
       return
     }
 
-    const findDiary = await db.getDiariesByYearMonthAndDate({
-      id: parseInt(id, 10),
-      year: parseInt(date.year, 10),
-      month: parseInt(date.month, 10),
-      date: parseInt(date.date, 10),
-    })
-
-    if (findDiary.length === 0) {
-      res.status(403).json({
-        success: false,
-        msg: '수정 일자에 일기가 존재하지 않습니다.',
-      })
-      return
-    }
-
     const staticFeels = getMappedFeels()
     const staticEmotions = getMappedEmotions()
 
@@ -214,23 +199,12 @@ router.put('/:diaryId', isSignIn, isDiaryOwner, async (req: Request, res: Respon
       return
     }
 
-    const dateString = getFormDate(date)
-    const validDateString = isValidDateString(dateString)
-    if (!validDateString) {
-      res.status(403).json({
-        success: false,
-        msg: '날짜가 올바르지 않습니다.',
-      })
-      return
-    }
-
     await db.updateDiary({
       diaryId: parseInt(diaryId, 10),
       id: parseInt(id, 10),
       feel,
       emotions: JSON.stringify(emotions),
       text,
-      dateString,
     })
 
     res.status(200).json({
