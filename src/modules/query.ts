@@ -130,10 +130,48 @@ export const insertDiary = async ({
   dateString: string
 }) => {
   try {
-    const SQL = 'insert into diary(id, feel, emotions, text, date) values(?, ?, ?, ?, ?)'
+    const SQL = 'insert into diary(id, feel, emotions, text, crate_date) values(?, ?, ?, ?, ?)'
     const SQL_VALUES = [id, feel, emotions, text, dateString]
     const [row] = await db.connect((con: any) => con.query(SQL, SQL_VALUES))()
     return row.insertId
+  } catch (e: any) {
+    console.error(e)
+    throw new Error(e)
+  }
+}
+
+export const updateDiary = async ({
+  diaryId,
+  id,
+  feel,
+  emotions = '',
+  text = '',
+  dateString,
+}: {
+  diaryId: number
+  id: number
+  feel: Feeling
+  emotions: string
+  text: string
+  dateString: string
+}) => {
+  try {
+    const SQL = 'UPDATE diary SET feel = ?, emotions = ?, text = ?, create_date = ? WHERE diary_id = ? AND id = ?'
+    const SQL_VALUES = [feel, emotions, text, dateString, diaryId, id]
+    const [row] = await db.connect((con: any) => con.query(SQL, SQL_VALUES))()
+    return row.affectedRows
+  } catch (e: any) {
+    console.error(e)
+    throw new Error(e)
+  }
+}
+
+export const deleteDiary = async ({ diaryId, id }: { diaryId: number; id: number }) => {
+  try {
+    const SQL = 'DELETE FROM diary WHERE diary_id = ? AND id = ?'
+    const SQL_VALUES = [diaryId, id]
+    const [row] = await db.connect((con: any) => con.query(SQL, SQL_VALUES))()
+    return row.affectedRows
   } catch (e: any) {
     console.error(e)
     throw new Error(e)
@@ -150,6 +188,19 @@ export const getDiariesByYearAndMonth = async ({ id, year, month }: { id: number
 
     const SQL = 'SELECT * FROM diary WHERE id = ? AND create_date >= ? AND create_date <= ? ORDER BY create_date'
     const SQL_VALUES = [id, startDateString, endDateString]
+
+    const [rows] = await db.connect((con: any) => con.query(SQL, SQL_VALUES))()
+    return rows
+  } catch (e: any) {
+    console.error(e)
+    throw new Error(e)
+  }
+}
+
+export const getDiaryByUserIdAndDiaryId = async ({ diaryId, id }: { diaryId: number; id: number }) => {
+  try {
+    const SQL = 'select * from diary where diary_id = ? and id = ?'
+    const SQL_VALUES = [diaryId, id]
 
     const [rows] = await db.connect((con: any) => con.query(SQL, SQL_VALUES))()
     return rows

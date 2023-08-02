@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken'
 import config from '../config'
 import * as db from '../modules/query'
 import { NextFunction, Request, Response } from 'express'
+import { getDiaryByUserIdAndDiaryId } from '../modules/query'
 
 const { JWT_SECRET } = config
 
@@ -67,6 +68,26 @@ export const isSignIn = async (req: Request, res: Response, next: NextFunction) 
     res.status(404).json({
       success: false,
       msg: '토큰이 유효하지 않습니다.',
+    })
+  }
+}
+
+export const isDiaryOwner = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id, diaryId } = req.params
+    const diary = await db.getDiaryByUserIdAndDiaryId({ diaryId, id })
+    if (!diary) {
+      return res.status(401).json({
+        success: false,
+        msg: '해당 일기가 존재하지 않습니다.',
+      })
+    }
+    next()
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({
+      success: false,
+      msg: '오류가 발생했습니다.',
     })
   }
 }
