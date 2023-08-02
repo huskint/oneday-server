@@ -75,7 +75,10 @@ export const isSignIn = async (req: Request, res: Response, next: NextFunction) 
 export const isDiaryOwner = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id, diaryId } = req.params
-    const diary = await db.getDiaryByUserIdAndDiaryId({ diaryId, id })
+    const diary = await db.getDiaryByUserIdAndDiaryId({
+      diaryId: parseInt(diaryId, 10),
+      id: parseInt(id, 10),
+    })
     if (!diary) {
       return res.status(401).json({
         success: false,
