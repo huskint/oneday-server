@@ -130,7 +130,7 @@ export const insertDiary = async ({
   dateString: string
 }) => {
   try {
-    const SQL = 'insert into diary(id, feel, emotions, text, crate_date) values(?, ?, ?, ?, ?)'
+    const SQL = 'insert into diary(id, feel, emotions, text, create_date) values(?, ?, ?, ?, ?)'
     const SQL_VALUES = [id, feel, emotions, text, dateString]
     const [row] = await db.connect((con: any) => con.query(SQL, SQL_VALUES))()
     return row.insertId
