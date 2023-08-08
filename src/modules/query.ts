@@ -207,14 +207,9 @@ export const getDiariesByYearMonthAndDate = async ({
   date: number
 }) => {
   try {
-    const startDate = new Date(year, month - 1, date)
-    const endDate = new Date(year, month - 1, date + 1)
-
-    const startDateString = startDate.toISOString().split('T')[0]
-    const endDateString = endDate.toISOString().split('T')[0]
-
-    const SQL = 'SELECT * FROM diary WHERE id = ? AND create_date >= ? AND create_date < ? ORDER BY create_date'
-    const SQL_VALUES = [id, startDateString, endDateString]
+    const createDate = `${year}-${month}-${date}`
+    const SQL = 'SELECT * FROM diary WHERE id = ? AND create_date = ?'
+    const SQL_VALUES = [id, createDate]
 
     const [rows] = await db.connect((con: any) => con.query(SQL, SQL_VALUES))()
     return rows
