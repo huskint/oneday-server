@@ -231,3 +231,55 @@ export const getDiaryByUserIdAndDiaryId = async ({ diaryId, id }: { diaryId: num
     throw new Error(e)
   }
 }
+
+export const getQuestionByType = async ({ type }: { type: string }) => {
+  try {
+    const SQL = 'select * from question where type = ?'
+    const SQL_VALUES = [type]
+
+    const [rows] = await db.connect((con: any) => con.query(SQL, SQL_VALUES))()
+    return rows
+  } catch (e: any) {
+    console.error(e)
+    throw new Error(e)
+  }
+}
+
+export const getAnswerByUserId = async ({ id }: { id: number }) => {
+  try {
+    const SQL = 'select * from answer where id = ? order by create_date desc'
+    const SQL_VALUES = [id]
+
+    const [rows] = await db.connect((con: any) => con.query(SQL, SQL_VALUES))()
+    return rows
+  } catch (e: any) {
+    console.error(e)
+    throw new Error(e)
+  }
+}
+
+export const getAnswerByUserIdAndAnswerId = async ({ answerId, id }: { answerId: number; id: number }) => {
+  try {
+    const SQL = 'select * from answer where answer_id = ? and id = ?'
+    const SQL_VALUES = [answerId, id]
+
+    const [rows] = await db.connect((con: any) => con.query(SQL, SQL_VALUES))()
+    return rows
+  } catch (e: any) {
+    console.error(e)
+    throw new Error(e)
+  }
+}
+
+export const insertAnswer = async ({ id, type, result }: { id: number; type: string; result: string }) => {
+  try {
+    const SQL = 'insert into answer(id, type, result) values(?, ?, ?)'
+    const SQL_VALUES = [id, type, result]
+
+    const [row] = await db.connect((con: any) => con.query(SQL, SQL_VALUES))()
+    return row.insertId
+  } catch (e: any) {
+    console.error(e)
+    throw new Error(e)
+  }
+}

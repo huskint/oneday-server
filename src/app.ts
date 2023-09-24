@@ -9,6 +9,8 @@ import config from './config'
 import { errorHandler, logHandler } from './modules/handler'
 import userRouter from './routes/userRouter'
 import diaryRouter from './routes/diaryRouter'
+import questionRouter from './routes/questionRouter'
+import answerRouter from './routes/answerRouter'
 
 const app = express()
 const { PORT } = config
@@ -48,6 +50,8 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/api/user', userRouter)
 app.use('/api/diary', diaryRouter)
+app.use('/api/question', questionRouter)
+app.use('/api/answer', answerRouter)
 app.use(logHandler)
 app.use(errorHandler)
 
