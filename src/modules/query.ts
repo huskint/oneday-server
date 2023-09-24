@@ -283,3 +283,16 @@ export const insertAnswer = async ({ id, type, result }: { id: number; type: str
     throw new Error(e)
   }
 }
+
+export const deleteAnswer = async ({ answerId, id }: { answerId: number; id: number }) => {
+  try {
+    const SQL = 'delete from answer where answer_id = ? and id = ?'
+    const SQL_VALUES = [answerId, id]
+
+    const [row] = await db.connect((con: any) => con.query(SQL, SQL_VALUES))()
+    return row.affectedRows
+  } catch (e: any) {
+    console.error(e)
+    throw new Error(e)
+  }
+}

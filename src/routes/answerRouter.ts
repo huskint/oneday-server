@@ -121,7 +121,7 @@ router.get('/:answerId', isSignIn, isAnswerOwner, async (req: Request, res: Resp
   }
 })
 
-router.post('/write', isSignIn, async (req: Request, res: Response) => {
+router.post('/', isSignIn, async (req: Request, res: Response) => {
   try {
     const { id } = req.params
     const { type, scores } = req.body
@@ -184,6 +184,36 @@ router.post('/write', isSignIn, async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       msg: '테스트가 완료 되었습니다.',
+    })
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({
+      success: false,
+      msg: '오류가 발생 했습니다.',
+    })
+  }
+})
+
+router.delete('/:answerId', isSignIn, isAnswerOwner, async (req: Request, res: Response) => {
+  try {
+    const { id, answerId } = req.params
+
+    if (!answerId) {
+      res.status(403).json({
+        success: false,
+        msg: '답변 정보가 올바르지 않습니다.',
+      })
+      return
+    }
+
+    await db.deleteAnswer({
+      answerId: parseInt(answerId, 10),
+      id: parseInt(id, 10),
+    })
+
+    res.status(200).json({
+      success: true,
+      msg: `답변이 삭제 되었습니다.`,
     })
   } catch (e) {
     console.error(e)
