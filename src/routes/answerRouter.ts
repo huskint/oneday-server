@@ -142,7 +142,7 @@ router.post('/write', isSignIn, async (req: Request, res: Response) => {
       return
     }
 
-    if (!scores.every((score: number) => score >= 1 && score <= 9)) {
+    if (!scores.every((score: number) => score >= 0 && score <= 9)) {
       res.status(403).json({
         success: false,
         msg: '점수는 1부터 9까지만 가능합니다.',
