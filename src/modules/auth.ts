@@ -94,3 +94,26 @@ export const isDiaryOwner = async (req: Request, res: Response, next: NextFuncti
     })
   }
 }
+
+export const isAnswerOwner = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id, answerId } = req.params
+    const answer = await db.getAnswerByUserIdAndAnswerId({
+      answerId: parseInt(answerId, 10),
+      id: parseInt(id, 10),
+    })
+    if (!answer) {
+      return res.status(401).json({
+        success: false,
+        msg: '해당 답변이 존재하지 않습니다.',
+      })
+    }
+    next()
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({
+      success: false,
+      msg: '오류가 발생했습니다.',
+    })
+  }
+}

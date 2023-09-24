@@ -29,6 +29,8 @@ router.post('/', isSignIn, async (req: Request, res: Response) => {
       return
     }
 
+    console.log('test1')
+
     const findDiary = await getDiariesByYearMonthAndDate({
       id: parseInt(id, 10),
       year: parseInt(date.year, 10),
