@@ -63,6 +63,7 @@ router.get('/', isSignIn, async (req: Request, res: Response) => {
         type: answer.type,
         answer: mappedAnswer,
         sumScore: mappedAnswer.reduce((acc: number, cur: any) => acc + cur.score, 0),
+        create_date: answer.create_date,
       }
     })
 
@@ -104,12 +105,19 @@ router.get('/:answerId', isSignIn, isAnswerOwner, async (req: Request, res: Resp
         score: parseInt(score, 10),
       }))
 
-    const mappedAnswer = getMappedAnswer(answer[0].result)
+    const mappedAnswer = getMappedAnswer(answer.result)
+    const responseAnswer = {
+      answer_id: answer.answer_id,
+      type: answer.type,
+      answer: mappedAnswer,
+      sumScore: mappedAnswer.reduce((acc: number, cur: any) => acc + cur.score, 0),
+      create_date: answer.create_date,
+    }
 
     res.status(200).json({
       success: true,
       data: {
-        answer: mappedAnswer,
+        answer: responseAnswer,
       },
     })
   } catch (e) {
