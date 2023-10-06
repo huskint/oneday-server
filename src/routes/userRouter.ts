@@ -5,7 +5,7 @@ import axios from 'axios'
 import * as db from '../modules/query'
 import getValidationUser from '../utils/getValidationUser'
 import { createToken, isSignIn } from '../modules/auth'
-import { updateUserName } from '../modules/query'
+import { updateUserByEmail, updateUserName } from '../modules/query'
 
 const router = express.Router()
 
@@ -262,6 +262,46 @@ router.patch('/', isSignIn, async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       msg: '이름이 변경 되었습니다.',
+    })
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({
+      success: false,
+      msg: '오류가 발생 했습니다.',
+    })
+  }
+})
+
+router.put('/password', isSignIn, async (req: Request, res: Response) => {
+  try {
+    const { password } = req.body
+    const { email } = req.params
+
+    if (!getValidationUser('password', password)) {
+      res.status(403).json({
+        success: false,
+        msg: '비밀번호가 올바르지 않습니다.',
+      })
+      return
+    }
+
+    const hashPassword = await bcrypt.hash(password, 10)
+    const isUpdate = await db.updateUserByEmail({
+      email,
+      password: hashPassword,
+    })
+
+    if (!isUpdate) {
+      res.status(403).json({
+        success: false,
+        msg: '비밀번호 변경에 실패 했습니다.',
+      })
+      return
+    }
+
+    res.status(200).json({
+      success: true,
+      msg: '비밀번호가 변경 되었습니다.',
     })
   } catch (e) {
     console.error(e)
