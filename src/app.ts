@@ -11,6 +11,7 @@ import userRouter from './routes/userRouter'
 import diaryRouter from './routes/diaryRouter'
 import questionRouter from './routes/questionRouter'
 import answerRouter from './routes/answerRouter'
+import settingRouter from './routes/settingRouter'
 
 const app = express()
 const { PORT } = config
@@ -52,6 +53,7 @@ app.use('/api/user', userRouter)
 app.use('/api/diary', diaryRouter)
 app.use('/api/question', questionRouter)
 app.use('/api/answer', answerRouter)
+app.use('/api/setting', answerRouter)
 app.use(logHandler)
 app.use(errorHandler)
 

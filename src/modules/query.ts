@@ -200,6 +200,18 @@ export const deleteDiary = async ({ diaryId, id }: { diaryId: number; id: number
   }
 }
 
+export const getDiariesCountByUserId = async ({ id }: { id: string }) => {
+  try {
+    const SQL = 'SELECT COUNT(*) AS count FROM diary WHERE id = ?'
+    const SQL_VALUES = [id]
+    const [rows] = await db.connect((con: any) => con.query(SQL, SQL_VALUES))()
+    return rows[0].count
+  } catch (e: any) {
+    console.error(e)
+    throw new Error(e)
+  }
+}
+
 export const getDiariesByYearAndMonth = async ({ id, year, month }: { id: number; year: number; month: number }) => {
   try {
     const startDate = new Date(year, month - 1, 1)
@@ -289,6 +301,19 @@ export const getAnswerByUserIdAndAnswerId = async ({ answerId, id }: { answerId:
 
     const [rows] = await db.connect((con: any) => con.query(SQL, SQL_VALUES))()
     return rows
+  } catch (e: any) {
+    console.error(e)
+    throw new Error(e)
+  }
+}
+
+export const getAnswerCountByUserId = async ({ id }: { id: string }) => {
+  try {
+    const SQL = 'select count(*) as count from answer where id = ?'
+    const SQL_VALUES = [id]
+
+    const [rows] = await db.connect((con: any) => con.query(SQL, SQL_VALUES))()
+    return rows[0].count
   } catch (e: any) {
     console.error(e)
     throw new Error(e)
