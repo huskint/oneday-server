@@ -244,7 +244,7 @@ router.post('/oauth/kakao', async (req: Request, res: Response, next: NextFuncti
   }
 })
 
-router.patch('/', async (req: Request, res: Response) => {
+router.patch('/', isSignIn, async (req: Request, res: Response) => {
   try {
     const { name } = req.body
     const { id } = req.params
