@@ -257,15 +257,7 @@ router.patch('/', isSignIn, async (req: Request, res: Response) => {
       return
     }
 
-    const [findByUser] = await db.updateUserName({ id, name })
-
-    if (!findByUser) {
-      res.status(403).json({
-        success: false,
-        msg: '유저가 존재하지 않습니다.',
-      })
-      return
-    }
+    await db.updateUserName({ id, name })
 
     res.status(200).json({
       success: true,
