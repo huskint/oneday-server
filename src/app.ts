@@ -53,7 +53,7 @@ app.use('/api/user', userRouter)
 app.use('/api/diary', diaryRouter)
 app.use('/api/question', questionRouter)
 app.use('/api/answer', answerRouter)
-app.use('/api/setting', answerRouter)
+app.use('/api/setting', settingRouter)
 app.use(logHandler)
 app.use(errorHandler)
 
