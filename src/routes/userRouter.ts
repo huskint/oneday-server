@@ -5,6 +5,7 @@ import axios from 'axios'
 import * as db from '../modules/query'
 import getValidationUser from '../utils/getValidationUser'
 import { createToken, isSignIn } from '../modules/auth'
+import { updateUserName } from '../modules/query'
 
 const router = express.Router()
 
@@ -67,6 +68,7 @@ router.post('/signup', async (req: Request, res: Response) => {
       data: {
         token: signUpUser.user_token,
         user: {
+          email: signUpUser.email,
           name: signUpUser.name,
           type: signUpUser.type,
         },
@@ -143,6 +145,7 @@ router.post('/auth', isSignIn, async (req: Request, res: Response, next: NextFun
       success: true,
       data: {
         user: {
+          email: findByUser.email,
           name: findByUser.name,
           type: findByUser.type,
         },
@@ -234,6 +237,42 @@ router.post('/oauth/kakao', async (req: Request, res: Response, next: NextFuncti
       })
     }
   } catch (e) {
+    res.status(500).json({
+      success: false,
+      msg: '오류가 발생 했습니다.',
+    })
+  }
+})
+
+router.patch('/', async (req: Request, res: Response) => {
+  try {
+    const { name } = req.body
+    const { id } = req.params
+
+    if (!getValidationUser('name', name)) {
+      res.status(403).json({
+        success: false,
+        msg: '이름이 올바르지 않습니다.',
+      })
+      return
+    }
+
+    const [findByUser] = await db.updateUserName({ id, name })
+
+    if (!findByUser) {
+      res.status(403).json({
+        success: false,
+        msg: '유저가 존재하지 않습니다.',
+      })
+      return
+    }
+
+    res.status(200).json({
+      success: true,
+      msg: '이름이 변경 되었습니다.',
+    })
+  } catch (e) {
+    console.error(e)
     res.status(500).json({
       success: false,
       msg: '오류가 발생 했습니다.',

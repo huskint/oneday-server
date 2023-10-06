@@ -74,6 +74,18 @@ export const updateUserTokenByEmail = async ({ user_token, email }: { user_token
   }
 }
 
+export const updateUserName = async ({ id, name }: { id: string; name: string }) => {
+  try {
+    const SQL = 'update user set name = ? where id = ?'
+    const SQL_VALUES = [name, id]
+    const [row] = await db.connect((con: any) => con.query(SQL, SQL_VALUES))()
+    return row
+  } catch (e: any) {
+    console.error(e)
+    throw new Error(e)
+  }
+}
+
 export const insertUserBySocial = async ({
   name,
   type,
