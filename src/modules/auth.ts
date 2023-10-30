@@ -2,7 +2,6 @@ import jwt from 'jsonwebtoken'
 import config from '../config'
 import * as db from '../modules/query'
 import { NextFunction, Request, Response } from 'express'
-import { getDiaryByUserIdAndDiaryId } from '../modules/query'
 
 const { JWT_SECRET } = config
 
@@ -24,7 +23,7 @@ export const isSignIn = async (req: Request, res: Response, next: NextFunction) 
   if (!authorization) {
     return res.status(401).json({
       success: false,
-      msg: '토큰이 없음. 인증이 거부됨.',
+      msg: '올바른 접근이 아닙니다.',
     })
   }
 
@@ -32,7 +31,7 @@ export const isSignIn = async (req: Request, res: Response, next: NextFunction) 
   if (!token) {
     return res.status(401).json({
       success: false,
-      msg: '토큰이 없음. 인증이 거부됨.',
+      msg: '올바른 접근이 아닙니다.',
     })
   }
 
@@ -41,7 +40,7 @@ export const isSignIn = async (req: Request, res: Response, next: NextFunction) 
     if (!decoded || typeof decoded === 'string') {
       return res.status(401).json({
         success: false,
-        msg: '토큰이 유효하지 않습니다.',
+        msg: '올바른 접근이 아닙니다.',
       })
     }
 
@@ -67,7 +66,7 @@ export const isSignIn = async (req: Request, res: Response, next: NextFunction) 
     console.error(e)
     res.status(404).json({
       success: false,
-      msg: '토큰이 유효하지 않습니다.',
+      msg: '올바른 접근이 아닙니다.',
     })
   }
 }
