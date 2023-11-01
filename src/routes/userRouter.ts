@@ -217,6 +217,9 @@ router.post('/oauth/kakao', async (req: Request, res: Response, next: NextFuncti
           user_token: userToken,
           social_token: String(id),
         })
+      } else {
+        const userToken = createToken(id, 1)
+        await db.updateUserTokenBySocial({ social_token: id, user_token: userToken, type: 1 })
       }
       const [signinUser] = await db.findUserBySocial({ social_token: id, type: 1 })
       res.status(200).json({
