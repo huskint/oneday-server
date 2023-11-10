@@ -72,6 +72,7 @@ router.post('/signup', async (req: Request, res: Response) => {
           name: signUpUser.name,
           type: signUpUser.type,
         },
+        isFirstLogin: true,
       },
     })
   } catch (e) {
@@ -209,6 +210,7 @@ router.post('/oauth/kakao', async (req: Request, res: Response, next: NextFuncti
       }
 
       const [findByUser] = await db.findUserBySocial({ social_token: id, type: 1 })
+      let isFirstLogin = false
       if (!findByUser) {
         const userToken = createToken(id, 1)
         await db.insertUserBySocial({
@@ -217,6 +219,7 @@ router.post('/oauth/kakao', async (req: Request, res: Response, next: NextFuncti
           user_token: userToken,
           social_token: String(id),
         })
+        isFirstLogin = true
       } else {
         const userToken = createToken(id, 1)
         await db.updateUserTokenBySocial({ social_token: id, user_token: userToken, type: 1 })
@@ -231,6 +234,7 @@ router.post('/oauth/kakao', async (req: Request, res: Response, next: NextFuncti
             name: signinUser.name,
             type: signinUser.type,
           },
+          isFirstLogin,
         },
       })
     } catch (e) {
