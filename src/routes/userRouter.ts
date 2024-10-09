@@ -5,6 +5,7 @@ import axios from 'axios'
 import * as db from '../modules/query'
 import getValidationUser from '../utils/getValidationUser'
 import { createToken, isSignIn } from '../modules/auth'
+import config from '../config'
 import { updateUserByEmail, updateUserName } from '../modules/query'
 
 const router = express.Router()
@@ -183,7 +184,7 @@ router.post('/oauth/kakao', async (req: Request, res: Response, next: NextFuncti
             grant_type: 'authorization_code',
             client_id: 'a3d08c94732b0c85334d04b474f49873',
             code,
-            redirect_uri: 'http://haru-hannyan.com/oauth/kakao',
+            redirect_uri: config.KAKAO_REDIRECT,
           },
         },
       )
